@@ -1,0 +1,21 @@
+package com.arkhipov.drools;
+
+import com.arkhipov.drools.utils.*;
+
+global BestServerResult bestServer;
+global User user;
+
+rule "Closest Server"
+    when
+        currentServer : Server(Utils.checkDistance(user, currentServer, bestServer))
+    then
+        bestServer.setResult(currentServer);
+end
+
+rule "One User On Server"
+    when
+        eval(bestServer.getUserCount() != 1)
+        currentServer : Server(getUserCount() == 1)
+    then
+        bestServer.setResult(currentServer);
+end
